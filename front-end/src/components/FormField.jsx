@@ -1,6 +1,6 @@
 import React from "react";
 
-function FormField() {
+function FormField(props) {
   return <div>FormField</div>;
 }
 
