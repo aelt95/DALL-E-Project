@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Card, FormField, Loader } from "../components";
 
 const RenderCards = ({ data, title }) => {
-  if (data?.length > 0) data.map((post) => <Card key={post._id} {...post} />);
+  if (data?.length > 0) {
+    return data.map((post) => <Card key={post._id} {...post} />);
+  }
   return (
     <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">{title}</h2>
   );
@@ -15,26 +17,31 @@ const Home = () => {
   const [searchedResults, setSearchedResults] = useState(null);
   const [searchTimeOut, setsearchTimeOut] = useState(null);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("http://localhost:8080/api/v1/post", {
+  const fetchPost = async () => {
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://dall-e-2-0-5whc.onrender.com/api/v1/post",
+        {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-        });
-        if (response.ok) {
-          const result = await response.json();
-          console.log(result, result.data);
-          setAllPosts(result.data.reverse());
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result, result.data);
+        setAllPosts(result.data.reverse());
+      }
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchPost();
   }, []);
 
